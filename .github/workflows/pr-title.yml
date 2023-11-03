@@ -7,9 +7,6 @@ on:
       - edited
       - synchronize
 
-permissions:
-  pull-requests: write  # Needed to update the PR status
-
 jobs:
   main:
     name: Validate PR title
