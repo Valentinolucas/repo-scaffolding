@@ -3,6 +3,8 @@ name: Release
 on:
   workflow_dispatch:
   push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
     branches:
       - main
       - master
@@ -12,24 +14,26 @@ on:
       - '**/*.tf'
       - '.github/workflows/release.yml'
 
+name: Create Release
+
 jobs:
-  release:
-    name: Release
+  build:
+    name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-
-      - name: Release
-        uses: cycjimmy/semantic-release-action@v3
-        with:
-          semantic_version: 18.0.0
-          extra_plugins: |
-            @semantic-release/changelog@6.0.0
-            @semantic-release/git@10.0.0
-            conventional-changelog-conventionalcommits@4.6.3
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
