@@ -4,11 +4,7 @@ on:
     branches:
       - master
       - main
-permissions:
-  contents: write
-  packages: write
-  issues: write
-  metadata: write
+      
 jobs:
   bump_version:
     outputs:
