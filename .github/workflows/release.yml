@@ -9,7 +9,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2  # Use the latest stable version
@@ -39,4 +38,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ needs.tag_version.outputs.new_tag }}
+          tags: ${{ steps.tag_version.outputs.new_tag }}
