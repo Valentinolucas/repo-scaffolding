@@ -16,9 +16,29 @@ on:
       - main
 
 jobs:
-  build-and-publish:
+  Code-Quality-and-Static-Analysis:
+    name: Code Quality and Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Run Code Analysis
+        run: echo "Running Code Analysis..."
+
+  Unit-Testing:
+    name: Unit Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Run Unit Tests
+        run: echo "Running unit tests..."
+
+  Build-and-Publish:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    needs:
+      - Code-Quality-and-Static-Analysis
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -57,27 +77,31 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  deploy-to-test:
+  Deploy-to-Development:
     name: Deploy to development
     runs-on: ubuntu-latest
     needs: build-and-publish
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - run: echo "Deploying to development environment..."
-      - run: echo "Running tests..."
+      - name: Deploy to development
+        run: echo "Deploying to development environment..."
+      - name: Functional and Regression Testing
+        run: echo "Running tests..."  
       
-  deploy-to-staging:
+  Deploy-to-Staging:
     name: Deploy to staging
     runs-on: ubuntu-latest
     needs: build-and-publish
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - run: echo "Deploying to staging environment..."
-      - run: echo "Running integration tests..."
+      - name: Deploy to staging
+        run: echo "Deploying to staging environment..."
+      - name: Functional and Regression Testing
+        run: echo "Running integration tests..."
 
-  deploy-to-production:
+  Deploy-to-Production:
     name: Deploy to production
     runs-on: ubuntu-latest
     needs:
@@ -86,5 +110,7 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - run: echo "Deploying to production environment..."
-      - run: echo "Running smoke tests..."
+      - name: Deploy to production
+        run: echo "Deploying to production environment..."
+      - name: Smoke Testing
+        run: echo "Running smoke tests..."
