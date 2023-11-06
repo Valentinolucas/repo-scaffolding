@@ -10,10 +10,10 @@ jobs:
     name: Code Quality and Static Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
+      - name: Check out the repo
+        uses: actions/checkout@v2
       - name: Run Pysa Action
-        uses: facebook/pysa-action
+        uses: facebook/pysa-action@15c7aea01cff64049bafe04fac871bd2cb50df56
         with:
           repo-directory: './tla_example'
           requirements-path: 'requirements.txt'
