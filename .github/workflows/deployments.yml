@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Release
+name: Deployments
 
 on:
   release:
@@ -15,25 +15,25 @@ on:
 
 jobs:
   deploy-to-test:
-    name: Deploy to test
+    name: Deploy to development environment
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - run: echo "Deploying to test"
+      - run: echo "Deploying to development environment..."
       
   deploy-to-staging:
-    name: Deploy to staging
+    name: Deploy to staging environment
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - run: echo "Deploying to staging"
+      - run: echo "Deploying to staging environment..."
 
   deploy-to-production:
-    name: Deploy to production
+    name: Deploy to production environment
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - run: echo "Deploying to production"
+      - run: echo "Deploying to production environment..."
