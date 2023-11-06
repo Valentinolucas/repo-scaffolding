@@ -6,7 +6,7 @@ on:
       - main  # Adjust this to your main branch
 
 jobs:
-  Code-Quality-and-Static-Analysis:
+  code-quality-and-static-analysis:
     name: Code Quality and Static Analysis
     runs-on: ubuntu-latest
     steps:
@@ -19,15 +19,27 @@ jobs:
       - name: Run flake8
         uses: suo/flake8-github-action@releases/v1
         with:
-          checkName: 'Code-Quality-and-Static-Analysis'   # NOTE: this needs to be the same as the job name
+          checkName: 'code-quality-and-static-analysis'   # NOTE: this needs to be the same as the job name
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  unit-test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    needs:
+      - code-quality-and-static-analysis
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Run unit tests
+        run: echo "Running unit tests..."
 
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     needs:
-      - Code-Quality-and-Static-Analysis
+      - code-quality-and-static-analysis
+      - Unit-test
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -53,11 +65,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
     
-  Deploy-to-Development:
-    name: Deploy to development environment
+  deploy-to-development:
+    name: Deploy / Development
     runs-on: ubuntu-latest
     needs:
-      - Code-Quality-and-Static-Analysis
+      - code-quality-and-static-analysis
       - push_to_registry
     steps:
       - name: Check out the repo
