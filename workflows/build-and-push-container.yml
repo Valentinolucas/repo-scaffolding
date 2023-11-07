@@ -1,15 +1,13 @@
 on:
-  workflow_dispatch:
-    inputs:
+  workflow_call:
+    secrets:
+      REGISTRY_SERVER:
+        required: true
       REGISTRY_USERNAME:
-        description: 'Registry username'
         required: true
       REGISTRY_PASSWORD:
-        description: 'Registry password'
         required: true
-      REGISTRY_SERVER:
-        description: 'Registry server'
-        required: true
+
 
 jobs:
   build:
