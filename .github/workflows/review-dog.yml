@@ -11,4 +11,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
-          yamllint_flags: 'src/'
+          yamllint_flags: workflows/
