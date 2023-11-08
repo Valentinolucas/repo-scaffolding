@@ -1,17 +1,14 @@
 name: Terraform Infrastructure Change Management Pipeline with GitHub Actions
 
 on:
-  workflow_dispatch:
-    inputs:
-      working-directory:
-        description: 'Terraform working directory'
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
         required: true
-
-env:
-  TF_LOG: INFO
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE }}
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      BUCKET_TF_STATE:
+        required: true
 
 jobs:
   terraform:
