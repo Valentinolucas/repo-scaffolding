@@ -2,6 +2,21 @@ name: Terraform Infrastructure Change Management Pipeline with GitHub Actions
 
 on:
   workflow_call:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: string
+        default: 'development'
+      tf_working_dir:
+        description: 'Terraform working directory'
+        required: true
+        type: string
+        default: 'terraform'
+      tf_vars_path:
+        description: 'Terraform variables file path'
+        required: false
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -15,7 +30,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: terraform
+        working-directory: ${{ inputs.tf_working_dir }}
     permissions:
       pull-requests: write
     steps:
@@ -85,7 +100,7 @@ jobs:
 
           </details>
 
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
           // 3. If we have a comment, update it, otherwise create a new one
           if (botComment) {
