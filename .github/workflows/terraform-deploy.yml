@@ -7,14 +7,14 @@ on:
         description: 'Environment to deploy to'
         required: true
         type: string
-        default: 'development'
+        default: 'dev'
       tf_working_dir:
         description: 'Terraform working directory'
         required: true
         type: string
         default: 'terraform'
-      tf_vars_path:
-        description: 'Terraform variables file path'
+      tf_args:
+        description: 'Terraform commands arguments'
         required: false
         type: string
     secrets:
@@ -44,7 +44,7 @@ jobs:
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: terraform init ${{ inputs.tf_args }}
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -55,7 +55,7 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color
+      run: terraform plan -no-color ${{ inputs.tf_args }}
       continue-on-error: true
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
