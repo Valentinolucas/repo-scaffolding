@@ -1,11 +1,11 @@
 on:
-  workflow_call:
-    secrets:
-      DOCKER_USERNAME:
-        required: true
-      DOCKER_PASSWORD:
-        required: true
-
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - main  # Adjust this to your main branch
 
 jobs:
   build-and-push-container:
