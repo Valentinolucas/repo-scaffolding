@@ -48,7 +48,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME: ${{ github.repository }}
+          IMAGE_NAME: 'scafolding'
           IMAGE_TAG: ${{ github.ref }}
 
   
