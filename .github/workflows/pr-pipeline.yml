@@ -22,5 +22,5 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME: 'scaffolding-dev'
-          IMAGE_TAG: ${{ github.event.pull_request.number || github.event.issue.number }}
+          IMAGE_NAME: scaffolding-dev
+          IMAGE_TAG: PR-${{ github.event.pull_request.number || github.event.issue.number }}

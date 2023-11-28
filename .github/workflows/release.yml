@@ -1,0 +1,55 @@
+name: Bump version
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  create-release:
+    if: github.event.action != 'labeled'
+    runs-on: ubuntu-latest
+    outputs:
+      next_version: ${{ steps.bumpr.outputs.next_version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Bump version on merging Pull Requests with specific labels.
+      # (bump:major,bump:minor,bump:patch)
+      - id: bumpr
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: haya14busa/action-bumpr@v1
+
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Execute Build and Push Script
+        run: bash scripts/build-and-push.sh
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: 'scaffolding'
+          IMAGE_TAG: ${{ needs.create-release.outputs.next_version }}
+
+  release-check:
+    if: github.event.action == 'labeled'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Post bumpr status comment
+        uses: haya14busa/action-bumpr@v1
+        
