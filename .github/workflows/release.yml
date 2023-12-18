@@ -19,7 +19,7 @@ jobs:
 
       - name: Get Short SHA
         id: short_sha
-        run: echo "::set-output name=sha_short::$(echo ${GITHUB_SHA} | cut -c1-7)"
+        run: $(echo ${GITHUB_SHA} | cut -c1-7) >> $GITHUB_OUTPUT
 
       - name: Execute Build and Push Script
         run: bash scripts/build-and-push.sh
