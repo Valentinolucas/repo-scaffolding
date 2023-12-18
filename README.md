@@ -1,5 +1,3 @@
-[![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
-
 # CI-TOOLS
 
 This scaffold is a collection of scripts to facilitate TLA CI pipeline. It's designed to
