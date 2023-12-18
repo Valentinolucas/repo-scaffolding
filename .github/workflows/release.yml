@@ -8,6 +8,29 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
+      - name: Get Short SHA
+        id: short_sha
+        run: echo "sha_short=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Changelog
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+        env:
+          REPO: ${{ github.repository }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.short_sha.outputs.sha_short }}
+          release_name: Release ${{ steps.short_sha.outputs.sha_short }}
+          body: |
+            ${{ steps.Changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -16,10 +39,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
-      - name: Get Short SHA
-        id: short_sha
-        run: echo "sha_short=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
 
       - name: Execute Build and Push Script
         run: bash scripts/build-and-push.sh
