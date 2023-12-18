@@ -1,5 +1,5 @@
 # .github/release.yml
-
+# Automatically create a changelog when a new tag is pushed
 changelog:
   exclude:
     labels:
